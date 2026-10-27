@@ -1,0 +1,510 @@
+10.26 23:49
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代号：岬息 | CAPE BREATH</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0c;
+            --surface: #141418;
+            --border: #2a2a32;
+            --accent: #e8651a;
+            --accent-dim: #e8651a44;
+            --text: #d4d4d8;
+            --text-dim: #71717a;
+            --glow: 0 0 20px rgba(232, 101, 26, 0.3);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ====== 导航栏 ====== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(10,10,12,0.95) 0%, transparent 100%);
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* ====== 首屏 Hero ====== */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 背景动画网格 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(232,101,26,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232,101,26,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(30deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(30deg) translateY(60px); }
+        }
+
+        /* 扫描线效果 */
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.15) 2px,
+                rgba(0,0,0,0.15) 4px
+            );
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            color: var(--accent);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.3s forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            letter-spacing: 8px;
+            line-height: 1.1;
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.5s forwards;
+        }
+
+        .hero-title-en {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(0.8rem, 2vw, 1.2rem);
+            color: var(--text-dim);
+            letter-spacing: 12px;
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.7s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-top: 30px;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeInUp 0.8s 0.9s forwards;
+        }
+
+        .hero-subtitle span {
+            color: var(--accent);
+            margin: 0 8px;
+        }
+
+        .hero-buttons {
+            margin-top: 50px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.8s 1.1s forwards;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            border: 1px solid var(--accent);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            background: #fff;
+            border-color: #fff;
+            box-shadow: var(--glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent-dim);
+        }
+
+        /* 向下滚动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-hint::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ====== 核心玩法 ====== */
+        .section {
+            padding: 120px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--accent);
+            letter-spacing: 5px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .feature-item {
+            background: var(--surface);
+            padding: 50px 35px;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        .feature-item:hover {
+            background: #1a1a22;
+        }
+
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.3s;
+        }
+
+        .feature-item:hover::before {
+            height: 100%;
+        }
+
+        .feature-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+
+        .feature-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        /* ====== 开发者日志 ====== */
+        .devlog-section {
+            background: var(--surface);
+            padding: 120px 40px;
+        }
+
+        .devlog-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .log-entry {
+            border: 1px solid var(--border);
+            padding: 50px;
+            position: relative;
+        }
+
+        .log-entry::before {
+            content: 'LOG.001';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            background: var(--bg);
+            padding: 0 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.7rem;
+            color: var(--accent);
+            letter-spacing: 3px;
+        }
+
+        .log-date {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .log-text {
+            font-size: 0.95rem;
+            line-height: 2;
+            color: var(--text);
+        }
+
+        .log-text p {
+            margin-bottom: 20px;
+        }
+
+        .log-signature {
+            text-align: right;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 40px;
+        }
+
+        /* ====== 页脚 ====== */
+        footer {
+            padding: 60px 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-copy {
+            font-size: 0.75rem;
+            color: #444;
+            letter-spacing: 2px;
+        }/* ====== 移动端 ====== */
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .nav-links { display: none; }
+            .section { padding: 80px 20px; }
+            .devlog-section { padding: 80px 20px; }
+            .log-entry { padding: 30px 20px; }
+            .hero-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航 -->
+    <nav>
+        <div class="nav-logo">CAPE BREATH</div>
+        <div class="nav-links">
+            <a href="#features">玩法</a>
+            <a href="#devlog">日志</a>
+            <a href="#community">社区</a>
+        </div>
+    </nav><!-- 首屏 -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-tag">PROJECT CODE</div>
+            <h1 class="hero-title">代号：岬息</h1>
+            <div class="hero-title-en">CAPE BREATH</div>
+            <p class="hero-subtitle">
+                <span>搜</span>·<span>打</span>·<span>拆</span>·<span>建</span>
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">加入愿望单</a>
+                <a href="#devlog" class="btn btn-secondary">开发者日志</a>
+            </div>
+        </div>
+        <div class="scroll-hint">SCROLL</div>
+    </section>
+
+    <!-- 核心玩法 -->
+    <section id="features" class="section">
+        <div class="section-label">CORE SYSTEMS</div>
+        <h2 class="section-title">核心体验</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-num">01</div>
+                <div class="feature-name">搜</div>
+                <div class="feature-desc">深入废弃区域搜寻物资。每一次探索都有回报，每一处残骸都可能藏着生存的关键。</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-num">02</div>
+                <div class="feature-name">打</div>
+                <div class="feature-desc">正面突击或潜行迂回。备好弹药，依靠射击与战术应对威胁，战斗充满风险。</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-num">03</div>
+                <div class="feature-name">拆</div>
+                <div class="feature-desc">拆解旧设备与残骸，把零散零件变成有用的材料。万物皆可拆解，万物皆有价值。</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-num">04</div>
+                <div class="feature-name">建</div>
+                <div class="feature-desc">围墙、工作台、储物区，或是一个可以随时回来休整的据点。在荒野中搭建属于你的庇护所。</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发者日志 -->
+    <section id="devlog" class="devlog-section">
+        <div class="devlog-inner">
+            <div class="section-label">DEVELOPER LOG</div>
+            <h2 class="section-title">开发者日志</h2>
+            <div class="log-entry">
+                <div class="log-date">2026.10.26 / ENTRY 001</div>
+                <div class="log-text">
+                    <p>大家好，欢迎来到第一期开发者日志。</p>
+                    <p>这是我们第一次尝试独立制作一款游戏。长久以来，我们一直很喜欢一类游戏：没有被强行固定的路线，你可以自由决定自己要做什么。可以背起武器踏入危险区域，和敌人交火；可以在废弃的区域仔细搜寻物资，把一切能用的东西搜刮带走；可以拆解旧设备、残骸，把零散零件变成有用的材料；也可以停下来，挑选合适的位置，搭建一座属于自己的庇护所。这就是我们想要在代号：岬息里实现的核心体验——搜、打、拆、建，在同一个开放世界里交织在一起。</p>
+                    <p>在这个世界里，生存不会只有一种答案。如果你喜欢正面突击，就备好弹药，依靠射击与战术应对威胁；如果你更谨慎，就选择潜行、迂回，用侦察避开不必要的冲突。当收集到足够资源，你就可以开始建造：围墙、工作台、储物区，或是一个可以随时回来休整的据点。我们希望让每一次探索都有回报，让每一次战斗都有风险，让每一块被拆解的残骸，都成为构建这个世界的一部分。</p>
+                    <p>当然，现在一切都还处在早期阶段。很多系统还只是原型，很多想法还在反复测试。有些设计可能会因为手感、性能或者体验问题被推翻，有些期待的功能可能需要很长时间才能落地。独立开发不会一帆风顺，会遇到 bug，会有卡顿，会看着自己的设想和实际效果产生落差，但这正是这段旅程最特别的地方。</p>
+                    <p>从这一期开始，我们会持续记录项目的成长。在这里，你会看到地图的迭代、武器与射击手感的调整、生存系统的打磨、建造功能的更新，还有那些在开发过程里遇到的难题、试错过程，以及偶尔出现的惊喜。我们不想只在游戏完成之后再和大家见面，而是希望把这个世界从无到有、一点点成型的过程分享给每一个感兴趣的人。</p>
+                    <p>如果你喜欢开放世界、生存、射击与建造，如果你也期待一个可以自由选择行动方式的荒野，欢迎一起见证 代号：岬息 的诞生。</p>
+                    <p>前路还很长，我们会慢慢把这个危险又充满可能性的世界搭建完整。</p>
+                </div>
+                <div class="log-signature">—— 小落工作室运营</div>
+            </div>
+        </div>
+    </section><!-- 页脚 -->
+    <footer id="community">
+        <div class="footer-logo">CAPE BREATH</div>
+        <div class="footer-links">
+            <a href="#">Bilibili</a>
+            <a href="#">抖音</a>
+            <a href="#">QQ群</a>
+            <a href="#">联系我们</a>
+        </div>
+        <div class="footer-copy">© 2026 小落工作室. ALL RIGHTS RESERVED.</div>
+    </footer>
+
+</body>
+</html>
